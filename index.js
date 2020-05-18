@@ -45,6 +45,8 @@ app.get('/', (req, res)=> res.sendFile(path.join(__dirname, 'public', 'index.htm
 app.get('/getDirList', require('./routes/File').getDirList)
 app.post('/getFileList', require('./routes/File').getFileList)
 app.post('/getFileContent', require('./routes/File').getFileContent)
+app.post('/createDir', require('./routes/File').createDir)
+app.post('/deleteDir', require('./routes/File').deleteDir)
 
 app.post('/upload', require('./routes/File').upload)
 app.post('/test', (req, res)=> res.json('测试api'))

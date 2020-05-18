@@ -33,3 +33,36 @@ exports.getFileContent = async (req, res) => {
     const {value} = await mammoth.convertToHtml({path: path.join(basePath, dirName, fileName)})
     res.json(value)
 }
+
+exports.createDir = async (req, res) => {
+    const {dirName} = req.body
+    const dirPath = path.join(basePath, dirName)
+    const isExist = fs.existsSync(dirPath)
+    if(!isExist){
+        fs.mkdir(dirPath,(error)=>{
+            if(error){
+                res.json(false)
+                return false;
+            }
+            res.json(true)
+        })
+    }else{
+        res.json(false)
+    }
+}
+
+exports.deleteDir = async (req, res) => {
+    const {dirName} = req.body
+    const dirPath = path.join(basePath, dirName)
+    const isExist = fs.existsSync(dirPath)
+    if(isExist){
+        var files = fs.readdirSync(dirPath);//读取该文件夹
+        for(let i=0,len=files.length;i<len;i++){
+            fs.unlinkSync(path.join(dirPath, files[i])); 
+        }
+        fs.rmdirSync(dirPath);
+        res.json(true)
+    }else{
+        res.json(false)
+    }
+}
