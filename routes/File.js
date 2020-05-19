@@ -51,6 +51,19 @@ exports.createDir = async (req, res) => {
     }
 }
 
+exports.renameDir = async (req, res) => {
+    const [oldName, newName] = req.body.dirName.split('->')
+    const dirPath = path.join(basePath, oldName)
+    const destPath = path.join(basePath, newName)
+    const isExist = fs.existsSync(dirPath)
+    if(isExist){
+        fs.renameSync(dirPath, destPath);
+        res.json(true)
+    }else{
+        res.json(false)
+    }
+}
+
 exports.deleteDir = async (req, res) => {
     const {dirName} = req.body
     const dirPath = path.join(basePath, dirName)
@@ -61,6 +74,31 @@ exports.deleteDir = async (req, res) => {
             fs.unlinkSync(path.join(dirPath, files[i])); 
         }
         fs.rmdirSync(dirPath);
+        res.json(true)
+    }else{
+        res.json(false)
+    }
+}
+
+exports.deleteFile = async (req, res) => {
+    const {dirName,fileName} = req.body
+    const filePath = path.join(basePath, dirName,fileName)
+    const isExist = fs.existsSync(filePath)
+    if(isExist){
+        fs.unlinkSync(path.join(filePath))
+        res.json(true)
+    }else{
+        res.json(false)
+    }
+}
+
+exports.renameFile = async (req, res) => {
+    const {dirName,fileName,rename} = req.body
+    const filePath = path.join(basePath, dirName,fileName)
+    const destPath = path.join(basePath, dirName,rename)
+    const isExist = fs.existsSync(filePath)
+    if(isExist){
+        fs.renameSync(filePath, destPath);
         res.json(true)
     }else{
         res.json(false)
