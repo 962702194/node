@@ -5,7 +5,7 @@ const compression = require('compression')
 const log4js = require('log4js')
 const moment = require('moment')
 const path = require('path')
-const multer  = require('multer')
+const multer = require('multer')
 const config = require('./config')
 
 const logName = moment().format('YYYY年MM月DD日') + '.log'
@@ -32,7 +32,6 @@ app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders: (res, path) => { }
 }))
 
-
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -41,7 +40,8 @@ app.all('*', (req, res, next) => {
   next()
 })
 
-app.get('/', (req, res)=> res.sendFile(path.join(__dirname, 'public', 'index.html')))
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')))
+app.post('/upload', require('./routes/File').upload)
 app.get('/getDirList', require('./routes/File').getDirList)
 app.post('/getFileList', require('./routes/File').getFileList)
 app.post('/getFileContent', require('./routes/File').getFileContent)
@@ -50,9 +50,6 @@ app.post('/renameDir', require('./routes/File').renameDir)
 app.post('/deleteDir', require('./routes/File').deleteDir)
 app.post('/deleteFile', require('./routes/File').deleteFile)
 app.post('/renameFile', require('./routes/File').renameFile)
-
-app.post('/upload', require('./routes/File').upload)
-app.post('/test', (req, res)=> res.json('测试api'))
 
 app.listen(config.server.port, () => {
   log.info('服务启动成功！')
