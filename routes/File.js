@@ -52,13 +52,13 @@ exports.createDir = async (req, res) => {
 }
 
 exports.renameDir = async (req, res) => {
-  const [oldName, newName] = req.body.dirName.split('->')
+  const {oldName, dirName} = req.body
   const dirPath = path.join(basePath, oldName)
-  const destPath = path.join(basePath, newName)
+  const destPath = path.join(basePath, dirName)
   const isExist = fs.existsSync(dirPath)
   if (isExist) {
     fs.renameSync(dirPath, destPath)
-        res.json(true)
+    res.json(true)
   } else{
     res.json(false)
   }
